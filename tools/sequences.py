@@ -1,5 +1,5 @@
 import httpx
-from base import get_apollo_client
+from .base import get_apollo_client
 
 async def apollo_search_sequences(
     q_name: str = None,
