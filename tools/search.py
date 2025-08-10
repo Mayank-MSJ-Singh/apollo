@@ -1,5 +1,5 @@
 import httpx
-from base import get_apollo_client
+from .base import get_apollo_client
 
 async def apollo_organization_job_postings(
     organization_id: str,
