@@ -1,18 +1,28 @@
-import requests
+import httpx
 from base import get_apollo_client
 
 
-def apollo_organisation_enrichment(domain:str):
+async def apollo_organisation_enrichment(domain: str):
     url = "https://api.apollo.io/api/v1/organizations/enrich"
     parts = domain.split(".")
     if parts[0] == "www":
         domain = ".".join(parts[1:])
-    params = {"domain":domain}
+    params = {"domain": domain}
     headers = get_apollo_client()
-    response = requests.get(url, headers=headers, params=params)
-    return (response.text)
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            return response.text
+    except httpx.HTTPStatusError as e:
+        return {"error": f"HTTP error {e.response.status_code}: {e.response.text}"}
+    except httpx.RequestError as e:
+        return {"error": f"Request failed: {str(e)}"}
+    except Exception as e:
+        return {"error": f"Unexpected error: {str(e)}"}
 
-def apollo_bulk_organisation_enrichment(domains: list):
+
+async def apollo_bulk_organisation_enrichment(domains: list):
     url = "https://api.apollo.io/api/v1/organizations/bulk_enrich"
 
     # remove 'www'------------------
@@ -28,8 +38,17 @@ def apollo_bulk_organisation_enrichment(domains: list):
     headers = get_apollo_client()
     params = {"domains[]": new_domains}
 
-    response = requests.post(url, headers=headers, params=params)
-    return response.text
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, headers=headers, params=params)
+            response.raise_for_status()
+            return response.text
+    except httpx.HTTPStatusError as e:
+        return {"error": f"HTTP error {e.response.status_code}: {e.response.text}"}
+    except httpx.RequestError as e:
+        return {"error": f"Request failed: {str(e)}"}
+    except Exception as e:
+        return {"error": f"Unexpected error: {str(e)}"}
 
 
 if __name__ == '__main__':
