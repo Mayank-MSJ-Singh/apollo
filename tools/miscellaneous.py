@@ -1,5 +1,5 @@
 import httpx
-from base import get_apollo_client
+from .base import get_apollo_client
 
 async def apollo_view_api_usage_stats():
     url = "https://api.apollo.io/api/v1/usage_stats/api_usage_stats"
