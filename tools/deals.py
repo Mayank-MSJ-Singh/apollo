@@ -9,6 +9,29 @@ async def apollo_create_deal(
     opportunity_stage_id: str = None,
     closed_date: str = None
 ):
+    """
+    Create a new deal for an Apollo account.
+
+    POST https://api.apollo.io/api/v1/opportunities
+
+    Parameters:
+    - name (str): Required. Human-readable name for the deal.
+    - owner_id (str): ID of the deal owner in your Apollo account.
+    - account_id (str): ID of the target account (company) for the deal.
+    - amount (str): Monetary value of the deal (no commas or currency symbols).
+    - opportunity_stage_id (str): ID of the deal stage.
+    - closed_date (str): Estimated close date (YYYY-MM-DD).
+
+    Notes:
+    - Requires master API key; calls without it return 403.
+    - Use Get a List of Users to find owner_id.
+    - Use Organization Search to find account_id.
+    - Use List Deal Stages to find opportunity_stage_id.
+
+    Returns:
+        Response with details of the created deal.
+    """
+
     url = "https://api.apollo.io/api/v1/opportunities"
     params = {
         "name": name,
@@ -38,6 +61,27 @@ async def apollo_list_all_deals(
     page: int = None,
     per_page: int = None
 ):
+    """
+    Retrieve all deals created for your team's Apollo account.
+
+    GET https://api.apollo.io/api/v1/opportunities/search
+
+    Query Parameters:
+    - sort_by_field (str): Sort deals by one of the following:
+        - amount: largest deal values first
+        - is_closed: closed deals first
+        - is_won: won deals first
+    - page (int): Page number to retrieve (for pagination).
+    - per_page (int): Number of results per page (to improve performance).
+
+    Notes:
+    - Requires a master API key; calls without it return 403.
+    - Not available for users on free plans.
+
+    Returns:
+        A paginated list of deals with their details.
+    """
+
     url = "https://api.apollo.io/api/v1/opportunities/search"
     params = {
         "sort_by_field": sort_by_field,
@@ -59,6 +103,22 @@ async def apollo_list_all_deals(
         return {"error": f"Unexpected error: {str(e)}"}
 
 async def apollo_view_deal(opportunity_id: str):
+    """
+    Retrieve detailed information about a specific deal in your team's Apollo account.
+
+    GET https://api.apollo.io/api/v1/opportunities/{opportunity_id}
+
+    Path Parameters:
+    - opportunity_id (str): The unique ID of the deal to retrieve.
+
+    Notes:
+    - Requires a master API key; calls without it return a 403 response.
+    - Use the List All Deals endpoint to find deal IDs.
+
+    Returns:
+        Detailed information about the deal, including owner ID, monetary value, deal stage, and associated account details.
+    """
+
     url = f"https://api.apollo.io/api/v1/opportunities/{opportunity_id}"
     headers = get_apollo_client()  # Needs master API key
 
@@ -87,6 +147,36 @@ async def apollo_update_deal(
     source: str = None,
     account_id: str = None
 ):
+    """
+    Update details of an existing deal in your team's Apollo account.
+
+    PATCH https://api.apollo.io/api/v1/opportunities/{opportunity_id}
+
+    Path Parameters:
+    - opportunity_id (str): The unique ID of the deal to update.
+
+    Query Parameters:
+    - owner_id (str): New owner ID for the deal.
+    - name (str): Updated human-readable deal name.
+    - amount (str): Updated monetary value (no commas or currency symbols).
+    - opportunity_stage_id (str): New deal stage ID.
+    - closed_date (date): Updated estimated close date (YYYY-MM-DD).
+    - is_closed (bool): Mark deal as closed if True.
+    - is_won (bool): Mark deal as won if True.
+    - source (str): Update the deal's source.
+    - account_id (str): Update associated company ID.
+
+    Notes:
+    - Requires a master API key; unauthorized calls return 403.
+    - Use List All Deals to find deal IDs.
+    - Use Get a List of Users to find valid owner IDs.
+    - Use List Deal Stages to find valid stage IDs.
+    - Use Organization Search to find company IDs.
+
+    Example:
+    Update deal name to "Massive Q3 Deal", set amount to 55123478, close the deal and mark as won.
+    """
+
     url = f"https://api.apollo.io/api/v1/opportunities/{opportunity_id}"
     headers = get_apollo_client()  # Needs master API key
 
@@ -115,6 +205,16 @@ async def apollo_update_deal(
         return {"error": f"Unexpected error: {str(e)}"}
 
 async def apollo_list_deal_stages():
+    """
+    Retrieve all deal stages available in your team's Apollo account.
+
+    GET https://api.apollo.io/api/v1/opportunity_stages
+
+    Notes:
+    - Requires a master API key; unauthorized calls return 403.
+    - Use the returned stage IDs to set or update deal stages when creating or updating deals.
+    """
+
     url = "https://api.apollo.io/api/v1/opportunity_stages"
     headers = get_apollo_client()  # Needs master API key
 
