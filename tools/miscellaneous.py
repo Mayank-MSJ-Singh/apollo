@@ -65,7 +65,7 @@ async def apollo_get_all_lists_and_tags():
         except Exception as e:
             return {"error": f"Unexpected error: {str(e)}"}
 
-async def apollo_get_all_custom_fields():
+async def apollo_list_all_custom_fields():
     url = "https://api.apollo.io/api/v1/typed_custom_fields"
     headers = get_apollo_client()  # Master API key required
 

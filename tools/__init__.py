@@ -43,7 +43,7 @@ apollo_bulk_organisation_enrichment
 from .miscellaneous import (
 apollo_list_email_accounts,
 apollo_list_users,
-apollo_get_all_custom_fields,
+apollo_list_all_custom_fields,
 apollo_get_all_lists_and_tags,
 apollo_view_api_usage_stats
 )
@@ -106,7 +106,7 @@ __all__ = [
     # miscellaneous
     "apollo_list_email_accounts",
     "apollo_list_users",
-    "apollo_get_all_custom_fields",
+    "apollo_list_all_custom_fields",
     "apollo_get_all_lists_and_tags",
     "apollo_view_api_usage_stats",
 
