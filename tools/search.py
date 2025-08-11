@@ -6,6 +6,25 @@ async def apollo_organization_job_postings(
     page: int = None,
     per_page: int = None
 ):
+    """
+    Retrieve current job postings for a specific organization.
+
+    GET https://api.apollo.io/api/v1/organizations/{organization_id}/job_postings
+
+    Path Parameters:
+    - organization_id (string, required): The unique Apollo ID of the company.
+
+    Query Parameters:
+    - page (int, optional): Page number for paginated results.
+    - per_page (int, optional): Number of job postings per page to improve performance.
+
+    Notes:
+    - Requires a master API key.
+    - Consumes Apollo credits.
+    - Max 10,000 records per organization.
+    - Use pagination to retrieve all data in batches.
+    """
+
     url = f'https://api.apollo.io/api/v1/organizations/{organization_id}/job_postings'
     params = {
         'page': page,
@@ -33,6 +52,25 @@ async def apollo_news_articles_search(
     page: int = None,
     per_page: int = None
 ):
+    """
+    Search news articles related to companies in the Apollo database.
+
+    POST https://api.apollo.io/api/v1/news_articles/search
+
+    Query Parameters:
+    - organization_ids (array of strings, required): Apollo IDs of companies to include in the search.
+    - categories (array of strings, optional): Filter by news categories or sub-categories (e.g., hires, investment, contract).
+    - published_at_min (date, optional): Start date (YYYY-MM-DD) for the date range filter.
+    - published_at_max (date, optional): End date (YYYY-MM-DD) for the date range filter.
+    - page (int, optional): Page number for paginated results.
+    - per_page (int, optional): Number of results per page to improve performance.
+
+    Notes:
+    - Requires a master API key.
+    - Consumes Apollo credits.
+    - Use pagination for large result sets.
+    """
+
     url = 'https://api.apollo.io/api/v1/news_articles/search'
     params = {
         'organization_ids[]': organization_ids,
