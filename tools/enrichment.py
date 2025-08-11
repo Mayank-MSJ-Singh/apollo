@@ -3,6 +3,19 @@ from .base import get_apollo_client
 
 
 async def apollo_organisation_enrichment(domain: str):
+    """
+    Enrich data for a single organization by domain.
+
+    GET https://api.apollo.io/api/v1/organizations/enrich
+
+    Query Parameters:
+    - domain (string, required): The domain of the company to enrich (exclude www., @, etc.).
+      Example: apollo.io or microsoft.com
+
+    Returns:
+    - Industry info, revenue, employee counts, funding rounds, phone numbers, locations, and other enriched company data.
+    """
+
     url = "https://api.apollo.io/api/v1/organizations/enrich"
     parts = domain.split(".")
     if parts[0] == "www":
@@ -23,6 +36,23 @@ async def apollo_organisation_enrichment(domain: str):
 
 
 async def apollo_bulk_organisation_enrichment(domains: list):
+    """
+    Enrich data for up to 10 organizations in one call.
+
+    POST https://api.apollo.io/api/v1/organizations/bulk_enrich
+
+    Query Parameters:
+    - domains[] (array of strings, required): List of company domains to enrich (exclude www., @, etc.).
+      Example: ["apollo.io", "microsoft.com"]
+
+    Returns:
+    - Enriched data for each company including industry, revenue, employee count, funding rounds, phone numbers, and locations.
+
+    Notes:
+    - Rate limit is 50% of the single organization enrichment per-minute limit.
+    - Hourly and daily limits are the same as the single enrichment endpoint.
+    """
+
     url = "https://api.apollo.io/api/v1/organizations/bulk_enrich"
 
     # remove 'www'------------------
