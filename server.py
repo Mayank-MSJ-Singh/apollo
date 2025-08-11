@@ -82,11 +82,11 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-HUBSPOT_MCP_SERVER_PORT = int(os.getenv("HUBSPOT_MCP_SERVER_PORT", "5000"))
+APOLLO_MCP_SERVER_PORT = int(os.getenv("APOLLO_MCP_SERVER_PORT", "5000"))
 
 
 @click.command()
-@click.option("--port", default=HUBSPOT_MCP_SERVER_PORT, help="Port to listen on for HTTP")
+@click.option("--port", default=APOLLO_MCP_SERVER_PORT, help="Port to listen on for HTTP")
 @click.option(
     "--log-level",
     default="INFO",
@@ -110,7 +110,7 @@ def main(
     )
 
     # Create the MCP server instance
-    app = Server("hubspot-mcp-server")
+    app = Server("apollo-mcp-server")
 
 #-------------------------------------------------------------------------------
 
